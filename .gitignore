@@ -22,3 +22,11 @@
 Homestead.json
 Homestead.yaml
 Thumbs.db
+
+# Uploaded evidence files (data runtime / privat)
+/public/uploads
+/storage/app/public/uploads
+
+# Environment & secrets tambahan
+.env.*
+!.env.example

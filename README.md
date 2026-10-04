@@ -1,59 +1,194 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 🏛️ Geotrax — Sistem Penilaian Kompetensi SDM
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+> Platform penilaian kompetensi pegawai berbasis **SKKNI** (Standar Kompetensi Kerja Nasional Indonesia)
+> dengan **penilaian bukti dokumen otomatis menggunakan AI (Google Gemini)**.
+> Mencakup alur lengkap: standar kompetensi → penilaian → evidence → skoring → laporan hasil.
 
-## About Laravel
+![Laravel](https://img.shields.io/badge/Laravel-12-FF2D20?logo=laravel&logoColor=white)
+![PHP](https://img.shields.io/badge/PHP-8.2+-777BB4?logo=php&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?logo=postgresql&logoColor=white)
+![TailwindCSS](https://img.shields.io/badge/Tailwind-4-06B6D4?logo=tailwindcss&logoColor=white)
+![Supabase](https://img.shields.io/badge/Storage-Supabase_S3-3ECF8E?logo=supabase&logoColor=white)
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 📌 Latar Belakang
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Penilaian kompetensi pegawai (asesmen SKKNI) secara manual membutuhkan banyak langkah: memeriksa
+bukti dokumen, mencocokkan dengan elemen kompetensi, dan menghitung skor per kriteria kerja (KUK).
+Proses ini lambat dan rentan subjektivitas.
 
-## Learning Laravel
+**Geotrax** mendigitalkan seluruh alur tersebut, dan menggunakan **AI untuk menilai bukti dokumen
+secara otomatis** — memberi skor + alasan penilaian, sehingga asesor hanya perlu memverifikasi.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+---
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## ✨ Fitur Utama
 
-## Laravel Sponsors
+### 🔐 Autentikasi & Multi-Role
+Tiga peran dengan dashboard masing-masing:
+- **Admin** — kelola pengguna, master unit, standar profil, periode penilaian
+- **Pimpinan** — nilai anggota tim, kelola koleksi, lihat hasil kompetensi
+- **Pegawai** — unggah bukti aktivitas, lihat profil & hasil penilaian
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### 📋 Manajemen Standar Kompetensi (SKKNI)
+- Unit kompetensi & elemen kompetensi
+- Standar profil jabatan per unit
+- Analisis gap (kesenjangan) kompetensi
 
-### Premium Partners
+### 🤖 Penilaian Bukti Dokumen dengan AI
+- Upload evidence (PDF, DOCX) → disimpan ke **Supabase S3**
+- AI (Gemini) menganalisis isi dokumen → memberi **skor + alasan**
+- Cache hasil evaluasi (30 hari) untuk efisiensi & ketahanan
+- Proxy dokumen untuk mengatasi CORS ke cloud storage
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+### 📊 Penilaian & Hasil
+- Periode penilaian, manajemen penilaian, manajemen evidence
+- Skoring per elemen kompetensi (skala 1–5)
+- Kategorisasi otomatis: **Sangat Rendah → Sangat Tinggi** (`HasilKompetensiCalculator`)
+- Export hasil kompetensi
 
-## Contributing
+### 🎓 Softskill
+- Standar softskill & penilaian softskill terpisah dari hardskill
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### 📄 Koleksi & Template Dokumen
+- Master koleksi (per pimpinan & pegawai)
+- Template dokumen siap unduh
 
-## Code of Conduct
+---
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## 🏗️ Arsitektur & Peran
 
-## Security Vulnerabilities
+```
+                    ┌─────────────────────────────────────────┐
+                    │            Laravel 12 (MVC)              │
+                    └────────┬───────────────────┬────────────┘
+                             │                   │
+            ┌────────────────┼───────────────────┼────────────────┐
+            ▼                ▼                   ▼                ▼
+   ┌────────────────┐ ┌──────────────┐  ┌─────────────────┐ ┌───────────┐
+   │  Admin panel   │ │Pimpinan panel│  │ Pegawai portal  │ │  Services │
+   │ (users, master │ │ (nilai tim,  │  │ (aktivitas,     │ │ Hasil     │
+   │  unit, standar)│ │  koleksi)    │  │  evidence)      │ │ Kompetensi│
+   └────────────────┘ └──────────────┘  └─────────────────┘ │ Calculator│
+                                                             └───────────┘
+         │                      │                    │
+         ▼                      ▼                    ▼
+ ┌───────────────┐     ┌────────────────┐   ┌──────────────────┐
+ │ PostgreSQL    │     │  Google Gemini │   │  Supabase S3     │
+ │ (Supabase)    │     │  (skoring AI)  │   │  (file evidence) │
+ └───────────────┘     └────────────────┘   └──────────────────┘
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+---
 
-## License
+## 🛠️ Teknologi
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+**Backend:** Laravel 12 · PHP 8.2+ · Eloquent ORM · Laravel Cache & Queue
+**Database:** PostgreSQL (dihosting di Supabase)
+**AI:** Google Gemini API (evaluasi dokumen bukti)
+**Storage:** S3-compatible (Supabase Storage) via `league/flysystem-aws-s3-v3`
+**Dokumen:** PhpSpreadsheet (Excel), spatie/pdf-to-text (PDF)
+**Frontend:** Blade · Tailwind CSS 4 · Vite 7
+
+---
+
+## 🚀 Cara Menjalankan
+
+### Prasyarat
+- PHP 8.2+
+- Composer
+- Node.js 18+
+- PostgreSQL 14+ (atau akun Supabase)
+- API key Google Gemini (untuk fitur skoring AI)
+
+### Instalasi
+
+```bash
+# Clone
+git clone https://github.com/izza26/web-geotrax-penilaian-sdm.git
+cd web-geotrax-penilaian-sdm
+
+# Install dependensi PHP
+composer install
+
+# Konfigurasi environment
+cp .env.example .env
+php artisan key:generate
+#   → isi DB_*, GEMINI_API_KEY, dan AWS_* (Supabase S3) di .env
+
+# Migrasi database
+php artisan migrate
+
+# Frontend assets
+npm install
+npm run build
+
+# Jalankan
+php artisan serve
+```
+
+Aplikasi berjalan di `http://localhost:8000`.
+
+### Menjalankan dalam Mode Dev (server + queue + vite sekaligus)
+
+```bash
+composer run dev
+```
+
+---
+
+## 📁 Struktur Proyek
+
+```
+app/
+├── Http/Controllers/
+│   ├── AdminController.php                 # Panel admin
+│   ├── AuthController.php                  # Login/register/logout
+│   ├── DashboardController.php             # Routing dashboard per role
+│   ├── AdminSoftskillController.php        # Kelola softskill
+│   ├── ManajemenPenilaianController.php    # Periode & penilaian
+│   ├── ManajemenEvidenceController.php     # Bukti dokumen
+│   ├── SkoringController.php               # Skoring + AJAX AI ⭐
+│   ├── HasilKompetensiController.php       # Laporan hasil
+│   ├── Pegawai/                            # Controller portal pegawai
+│   └── Pimpinan/                           # Controller panel pimpinan
+├── Models/                                 # Eloquent models (8)
+└── Services/
+    └── HasilKompetensiCalculator.php       # Logika kategorisasi skor ⭐
+
+database/migrations/                        # skema tabel
+resources/views/                            # Blade templates (60)
+routes/web.php                              # Definisi rute (240 baris)
+```
+
+---
+
+## 🧮 Logika Kategorisasi Skor
+
+`HasilKompetensiCalculator::kategori()` mengubah skor aktual menjadi 5 kategori
+berdasarkan interval nilai minimum–maksimum per jumlah item kompetensi:
+
+| Kategori | Rentang |
+|---|---|
+| Sangat Tinggi | interval ke-5 |
+| Tinggi | interval ke-4 |
+| Sedang | interval ke-3 |
+| Rendah | interval ke-2 |
+| Sangat Rendah | interval ke-1 |
+
+---
+
+## ⚠️ Catatan Keamanan
+
+- File `.env` (berisi kredensial DB, API key Gemini, dan kunci S3) **tidak di-commit** ke Git.
+- Gunakan `.env.example` sebagai template dan isi dengan kredensial milikmu sendiri.
+- Folder `vendor/`, `node_modules/`, dan `public/build` tidak di-commit.
+
+---
+
+## 👤 Penulis
+
+**Arhamiz Fegianti (Izza)**
+Mahasiswa Sistem Informasi — Universitas Trunojoyo Madura (UTM)
+📧 izzafegianti@gmail.com · 🐙 [@izza26](https://github.com/izza26)

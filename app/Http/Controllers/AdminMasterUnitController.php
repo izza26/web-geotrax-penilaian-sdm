@@ -12,8 +12,9 @@ class AdminMasterUnitController extends Controller
 {
     public function index()
     {
-        $data_hirarki = UnitKompetensi::with(['elemen' => function($q) {
-            $q->orderBy('elemen_id', 'asc');
+                $data_hirarki = UnitKompetensi::with(['elemen' => function($q) {
+                        $q->where('kode_elemen_excel', 'ILIKE', '%A')
+                            ->orderBy('elemen_id', 'asc');
         }, 'elemen.aktivitas' => function($q) {
             $q->orderBy('aktivitas_id', 'asc');
         }])->orderBy('kode_unit', 'asc')->get();
@@ -48,7 +49,7 @@ class AdminMasterUnitController extends Controller
                 foreach ($request->elemen_kode as $i => $kode_el) {
                     if (!$kode_el) continue;
                     $new_el_id = ElemenKompetensi::max('elemen_id') + 1;
-                    
+
                     ElemenKompetensi::create([
                         'elemen_id' => $new_el_id, 'kode_unit' => $request->kode_unit, 'rekap_elemen_id' => 1,
                         'kode_elemen_excel' => $kode_el, 'elemen_kompetensi' => $request->elemen_judul[$i],
